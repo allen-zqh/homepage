@@ -1,0 +1,435 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+}
+
+body {
+    margin: 0;
+    color: var(--ink);
+    background: var(--paper);
+    font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 17px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+    content: "";
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0 28%, var(--navy-900) 28% 100%);
+}
+
+::selection {
+    color: var(--navy-950);
+    background: var(--blue-100);
+}
+
+a {
+    color: var(--blue-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 160ms ease;
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+a:focus-visible {
+    outline: 3px solid rgba(36, 91, 133, .28);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.content {
+    width: min(1120px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 72px 0 44px;
+}
+
+.loading-state {
+    min-height: 55vh;
+    display: grid;
+    place-items: center;
+    color: var(--ink-faint);
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: clamp(48px, 8vw, 100px);
+    align-items: start;
+    padding: 40px 0 76px;
+    border-bottom: 1px solid var(--line-dark);
+}
+
+.eyebrow {
+    margin: 0 0 18px;
+    color: var(--accent);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .13em;
+    line-height: 1.5;
+    text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+iro-section-head {
+    font-family: "Source Serif 4", Georgia, serif;
+}
+
+h1 {
+    margin: 0;
+    color: var(--navy-950);
+    font-size: clamp(3rem, 7vw, 5.4rem);
+    font-weight: 600;
+    letter-spacing: -.045em;
+    line-height: .98;
+}
+
+.hero-role {
+    margin: 20px 0 30px;
+    color: var(--navy-800);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.hero-copy > p:not(.eyebrow, .hero-role) {
+    max-width: 760px;
+    color: var(--ink-soft);
+}
+
+.hero-intro {
+    font-size: 1.04rem;
+}
+
+.profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+}
+
+.profile-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 8px 14px;
+    border: 1px solid var(--line-dark);
+    color: var(--navy-800);
+    font-size: .88rem;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.profile-links a:hover {
+    border-color: var(--blue-700);
+    background: var(--white);
+}
+
+.profile-links .primary-link {
+    border-color: var(--navy-900);
+    color: var(--white);
+    background: var(--navy-900);
+}
+
+.profile-links .primary-link:hover {
+    border-color: var(--accent);
+    color: var(--white);
+    background: var(--accent);
+}
+
+.hero-portrait {
+    padding-top: 6px;
+}
+
+.portrait-frame {
+    position: relative;
+    padding: 9px;
+    border: 1px solid var(--line-dark);
+    background: var(--white);
+}
+
+.portrait-frame::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    bottom: -8px;
+    width: 48%;
+    height: 38%;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    pointer-events: none;
+}
+
+.portrait-frame img {
+    display: block;
+    width: 100%;
+    height: 322px;
+    object-fit: cover;
+    object-position: center 17%;
+    filter: saturate(.82) contrast(1.02);
+}
+
+iro-section {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    column-gap: clamp(32px, 6vw, 76px);
+    width: 100%;
+    padding: 58px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+iro-section-head {
+    grid-column: 1;
+    align-self: start;
+    color: var(--navy-900);
+    font-size: 1.5rem;
+    font-weight: 650;
+    line-height: 1.2;
+}
+
+iro-section-head::before {
+    content: "";
+    display: block;
+    width: 34px;
+    height: 3px;
+    margin-bottom: 14px;
+    background: var(--accent);
+}
+
+iro-section > :not(iro-section-head, .section-heading) {
+    grid-column: 2;
+}
+
+.section-heading {
+    grid-column: 1;
+    align-self: start;
+}
+
+.publication-heading {
+    position: sticky;
+    top: 102px;
+}
+
+.publication-nav {
+    display: grid;
+    gap: 8px;
+    margin-top: 22px;
+    padding-left: 13px;
+    border-left: 1px solid var(--line-dark);
+}
+
+.publication-nav a {
+    color: var(--ink-faint);
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.publication-nav a:hover {
+    color: var(--accent);
+}
+
+iro-section > p:first-of-type,
+iro-section > ul:first-of-type,
+iro-section > table:first-of-type {
+    margin-top: 0;
+}
+
+iro-section ul {
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+}
+
+iro-section li {
+    padding-left: .28rem;
+}
+
+iro-section li::marker {
+    color: var(--accent);
+}
+
+iro-section > p > li {
+    position: relative;
+    display: block;
+    margin: 0 0 18px;
+    padding: 0 0 18px 90px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-soft);
+}
+
+iro-section > p > li time {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--ink-faint);
+    font-size: .82rem;
+    font-weight: 650;
+    letter-spacing: .02em;
+    font-variant-numeric: tabular-nums;
+}
+
+iro-section > p > li:last-child {
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+
+iro-section > p > li::first-line {
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table h3 {
+    margin: 36px 0 8px;
+    color: var(--navy-900);
+    font-size: 1.08rem;
+    letter-spacing: .02em;
+}
+
+table tr:first-child h3 {
+    margin-top: 0;
+}
+
+iro-notice {
+    display: block;
+    margin-top: 14px;
+    color: var(--ink-faint);
+    font-size: .8rem;
+}
+
+iro-notice + iro-notice {
+    margin-top: 0;
+}
+
+@media (max-width: 820px) {
+    .content {
+        width: min(100% - 36px, 680px);
+        padding-top: 42px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr 180px;
+        gap: 32px;
+    }
+
+    .portrait-frame img {
+        height: 245px;
+    }
+
+    iro-section {
+        grid-template-columns: 140px minmax(0, 1fr);
+        column-gap: 28px;
+    }
+}
+
+@media (max-width: 620px) {
+    body {
+        font-size: 16px;
+    }
+
+    .content {
+        width: min(100% - 30px, 520px);
+        padding-top: 28px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding-bottom: 52px;
+    }
+
+    .hero-copy {
+        display: contents;
+    }
+
+    .hero-copy .eyebrow,
+    .hero-copy h1,
+    .hero-copy .hero-role {
+        grid-column: 1;
+    }
+
+    .hero-portrait {
+        grid-row: 4;
+        width: 124px;
+        padding: 0;
+    }
+
+    .portrait-frame {
+        width: 100%;
+    }
+
+    .portrait-frame img {
+        height: 160px;
+    }
+
+    .hero-copy > p:not(.eyebrow, .hero-role) {
+        margin-top: 0;
+    }
+
+    .profile-links {
+        margin-top: 12px;
+    }
+
+    iro-section {
+        display: block;
+        padding: 44px 0;
+    }
+
+    iro-section-head {
+        display: block;
+        margin-bottom: 28px;
+    }
+
+    .publication-heading {
+        position: static;
+        margin-bottom: 28px;
+    }
+
+    .publication-heading iro-section-head {
+        margin-bottom: 18px;
+    }
+
+    .publication-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        margin-top: 0;
+    }
+
+    iro-section > p > li {
+        padding-left: 0;
+    }
+
+    iro-section > p > li time {
+        position: static;
+        display: block;
+        margin-bottom: 4px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: .01ms !important;
+    }
+}
