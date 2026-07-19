@@ -1,0 +1,31 @@
+:root {
+    --navy-950: #0b1f33;
+    --navy-900: #102a43;
+    --navy-800: #183b56;
+    --blue-700: #245b85;
+    --blue-100: #dbeaf4;
+    --paper: #fbfaf7;
+    --paper-deep: #f3f0e9;
+    --white: #ffffff;
+    --ink: #18232d;
+    --ink-soft: #4a5864;
+    --ink-faint: #75818b;
+    --line: #d8d9d6;
+    --line-dark: #b7c0c8;
+    --accent: #a14d32;
+
+    /* Compatibility aliases for the original components. */
+    --iro-theme-color: var(--navy-900);
+    --iro-theme-color-lighter: var(--navy-800);
+    --iro-aux-color: var(--paper);
+    --iro-bg-color-darkest: var(--line);
+    --iro-bg-color-darker: var(--paper-deep);
+    --iro-bg-color: var(--paper);
+    --iro-text-color: var(--ink);
+    --iro-text-color-lighter: var(--ink-soft);
+    --iro-text-color-lightest: var(--ink-faint);
+    --iro-url-deactivate-color: var(--blue-700);
+    --iro-url-activate-color: var(--accent);
+    --iro-pub-emphasis-color: var(--accent);
+    --iro-border-color: var(--line);
+}
