@@ -2,7 +2,7 @@
 
 Personal academic website of **Qiuhan Zhao**, Assistant Professor at the Shanghai International College of Intellectual Property, Tongji University.
 
-The site is a lightweight static website designed for deployment with GitHub Pages.
+The site is a lightweight bilingual static website designed for deployment with GitHub Pages or Netlify. English is the default language; visitors can switch to Chinese from the navigation bar, and the preference is saved in the browser.
 
 ## Local preview
 
@@ -21,18 +21,27 @@ Then open [http://localhost:8000](http://localhost:8000) in a browser. Press `Co
 .
 ├── index.html              # Page shell and navigation
 ├── html/home.html          # Academic profile content
+├── html/home-zh.html       # Chinese profile content
 ├── css/                    # Layout, typography, colors, and components
-├── js/navigation.js        # Loads the main profile content
+├── js/navigation.js        # Loads content and manages language switching
 ├── assets/                 # Portrait and favicon
-└── cv.pdf                  # Curriculum vitae
+└── zhao_cv.pdf             # Curriculum vitae
 ```
 
 ## Updating the site
 
-- Edit academic content in `html/home.html`.
+- Edit English academic content in `html/home.html` and its Chinese counterpart in `html/home-zh.html`.
+- Keep section IDs and publication anchors identical in both content files so in-page links continue to work when switching languages.
+- Keep English publication titles, venue names, author lists, and publication links identical across both files.
 - Adjust the visual system in `css/colors.css` and `css/page.css`.
 - Replace `assets/avatar.jpg` to update the portrait.
-- Replace `cv.pdf` while keeping the filename unchanged to update the CV.
+- Replace `zhao_cv.pdf` while keeping the filename unchanged to update the CV.
+
+The Chinese version can be shared directly with `?lang=zh`, for example:
+
+```text
+https://your-domain.example/?lang=zh
+```
 
 ## Deployment
 

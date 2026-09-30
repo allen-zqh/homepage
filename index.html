@@ -27,12 +27,19 @@
             <a class="site-mark" href="#top" aria-label="Qiuhan Zhao — home">
                 <span class="site-name">Qiuhan Zhao</span>
             </a>
-            <div class="nav-links">
-                <a href="#news">News</a>
-                <a href="#edu">Education</a>
-                <a href="#pub">Publications</a>
-                <a href="#exp">Employment</a>
-                <a href="#service">Service</a>
+            <div class="nav-tools">
+                <div class="nav-links">
+                    <a href="#news" data-nav="news">News</a>
+                    <a href="#edu" data-nav="education">Education</a>
+                    <a href="#pub" data-nav="publications">Publications</a>
+                    <a href="#exp" data-nav="employment">Employment</a>
+                    <a href="#service" data-nav="service">Service</a>
+                </div>
+                <div class="language-switch" aria-label="Language">
+                    <button type="button" data-language="en" lang="en" aria-pressed="true">EN</button>
+                    <span aria-hidden="true">/</span>
+                    <button type="button" data-language="zh" lang="zh-CN" aria-pressed="false">中文</button>
+                </div>
             </div>
         </nav>
     </header>
@@ -41,8 +48,5 @@
         <div class="loading-state" role="status">Loading profile…</div>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => loadContent('home'));
-    </script>
 </body>
 </html>
