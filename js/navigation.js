@@ -2,7 +2,7 @@ const LANGUAGE_CONFIG = {
     en: {
         documentLanguage: 'en',
         contentFile: 'home',
-        title: 'Qiuhan Zhao | Tongji University',
+        title: 'Qiuhan Zhao',
         siteName: 'Qiuhan Zhao',
         description: 'Qiuhan Zhao is an Assistant Professor at Tongji University researching innovation, intellectual property, NLP, and economic geography.',
         navigationLabel: 'Primary navigation',
@@ -21,7 +21,7 @@ const LANGUAGE_CONFIG = {
     zh: {
         documentLanguage: 'zh-CN',
         contentFile: 'home-zh',
-        title: '赵秋涵｜同济大学',
+        title: '赵秋涵',
         siteName: '赵秋涵',
         description: '赵秋涵，同济大学助理教授，研究方向包括创新、知识产权、自然语言处理与经济地理。',
         navigationLabel: '主导航',
