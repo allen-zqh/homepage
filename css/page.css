@@ -129,6 +129,12 @@ h1 {
     font-size: 1.04rem;
 }
 
+.degree-thesis {
+    color: var(--ink-faint);
+    font-size: .88rem;
+    line-height: 1.55;
+}
+
 .profile-links {
     display: flex;
     flex-wrap: wrap;

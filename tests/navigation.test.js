@@ -29,5 +29,5 @@ test('Chinese metadata is localized', () => {
     assert.equal(metadata.documentLanguage, 'zh-CN');
     assert.match(metadata.title, /赵秋涵/);
     assert.equal(metadata.siteName, '赵秋涵');
-    assert.equal(metadata.navigation.news, '近期更新');
+    assert.equal(metadata.navigation.news, '近期动态');
 });

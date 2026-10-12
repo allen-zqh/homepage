@@ -137,7 +137,7 @@ test('initialization applies URL language to content, navigation, and active sta
 
     assert.equal(document.documentElement.lang, 'zh-CN');
     assert.equal(page.siteName.textContent, '赵秋涵');
-    assert.equal(page.links[0].textContent, '近期更新');
+    assert.equal(page.links[0].textContent, '近期动态');
     assert.equal(page.buttons[1].attributes['aria-pressed'], 'true');
     assert.equal(page.buttons[1].classList.contains('is-active'), true);
     assert.equal(page.content.innerHTML, '中文内容');
