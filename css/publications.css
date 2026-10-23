@@ -1,12 +1,104 @@
-.pub-desc-wrapper {
-    display: block;
-    padding: 16px 0 17px;
-    border-bottom: 1px solid var(--line);
-    vertical-align: top;
+.publication-content {
+    min-width: 0;
 }
 
-.pub-one:last-child .pub-desc-wrapper {
-    border-bottom: 0;
+.publication-content > .publication-group:first-child {
+    margin-top: 0;
+}
+
+.publication-group + .publication-group {
+    margin-top: 24px;
+}
+
+.publication-group.publication-disclosure:not([open]) + .publication-group.publication-disclosure {
+    margin-top: 8px;
+}
+
+.publication-group h3 {
+    margin: 0 0 8px;
+    color: var(--navy-900);
+    font-size: 1.08rem;
+    letter-spacing: .02em;
+}
+
+.publication-year {
+    display: inline;
+    margin: 0;
+    color: inherit;
+    font-size: .86rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+.publication-year-subheading {
+    margin: 20px 0 0;
+    color: var(--ink-faint);
+    font-size: .78rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.publication-disclosure {
+    margin-top: 22px;
+}
+
+.publication-disclosure > summary {
+    padding: 10px 0;
+    color: var(--ink-soft);
+    font-size: .86rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.publication-disclosure > summary::marker {
+    color: var(--accent);
+    font-size: .8em;
+}
+
+.publication-disclosure > summary:hover {
+    color: var(--accent);
+}
+
+.publication-disclosure > summary:focus-visible {
+    outline: 3px solid rgba(36, 91, 133, .28);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.publication-disclosure[open] > summary {
+    margin-bottom: 8px;
+}
+
+.publication-group > summary h3 {
+    display: inline;
+}
+
+.year-disclosure {
+    margin-top: 8px;
+}
+
+.year-disclosure:not([open]) + .year-disclosure:not([open]) {
+    margin-top: 0;
+}
+
+.year-disclosure > summary {
+    padding: 12px 0;
+}
+
+.year-disclosure[open] > summary {
+    margin-bottom: 0;
+}
+
+.publication-count {
+    color: var(--ink-faint);
+    font-size: .85em;
+    font-weight: 500;
+}
+
+.pub-desc-wrapper {
+    display: block;
+    padding: 10px 0 12px;
+    vertical-align: top;
 }
 
 .pub-title {
@@ -49,4 +141,23 @@
     font-size: .78rem;
     font-style: normal;
     font-weight: 700;
+}
+
+@media print {
+    .site-header,
+    .publication-nav {
+        display: none;
+    }
+
+    .publication-heading {
+        position: static;
+    }
+
+    .publication-disclosure > summary::marker {
+        content: "";
+    }
+
+    .pub-one {
+        break-inside: avoid;
+    }
 }

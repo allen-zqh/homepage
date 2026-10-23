@@ -52,7 +52,7 @@ class BilingualContentTests(unittest.TestCase):
         self.assertIn('id="news"> 近期动态', chinese)
         self.assertIn('id="edu"> 教育经历', chinese)
         self.assertIn('id="pub"> 学术成果', chinese)
-        self.assertIn('id="exp"> 工作与<br class="section-title-break">项目', chinese)
+        self.assertIn('id="exp"> 工作与项目', chinese)
         self.assertIn('id="service"> 学术服务', chinese)
 
     def test_chinese_editorial_service_uses_chinese_journal_names(self):
@@ -77,7 +77,7 @@ class BilingualContentTests(unittest.TestCase):
         self.assertIn('id="news"> Updates', english)
         self.assertIn('id="exp"> Employment<br class="section-title-break">&amp; Projects', english)
         self.assertIn('id="news"> 近期动态', chinese)
-        self.assertIn('id="exp"> 工作与<br class="section-title-break">项目', chinese)
+        self.assertIn('id="exp"> 工作与项目', chinese)
 
         section_ids = ['id="news"', 'id="edu"', 'id="exp"', 'id="pub"', 'id="service"']
         for page in (english, chinese):

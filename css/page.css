@@ -245,15 +245,24 @@ iro-section > :not(iro-section-head, .section-heading) {
     top: 102px;
 }
 
+.publication-note {
+    margin: 16px 0 14px;
+    padding-left: 14px;
+    color: var(--ink-faint);
+    font-size: .73rem;
+    line-height: 1.5;
+}
+
 .publication-nav {
     display: grid;
     gap: 8px;
-    margin-top: 22px;
+    margin-top: 0;
     padding-left: 13px;
     border-left: 1px solid var(--line-dark);
 }
 
-.publication-nav a {
+.publication-nav a,
+.publication-nav-group > summary {
     color: var(--ink-faint);
     font-size: .82rem;
     font-weight: 600;
@@ -261,8 +270,35 @@ iro-section > :not(iro-section-head, .section-heading) {
     text-decoration: none;
 }
 
-.publication-nav a:hover {
+.publication-nav a:hover,
+.publication-nav-group > summary:hover {
     color: var(--accent);
+}
+
+.publication-nav-group > summary {
+    cursor: pointer;
+}
+
+.publication-nav-group > summary::marker {
+    color: var(--accent);
+}
+
+.publication-nav-group > summary:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.publication-year-nav {
+    display: grid;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 2px 0 6px 10px;
+}
+
+.publication-year-nav a {
+    font-size: .74rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
 iro-section > p:first-of-type,
@@ -284,16 +320,21 @@ iro-section li::marker {
     color: var(--accent);
 }
 
-iro-section > p > li {
+iro-section > .updates-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.updates-list > li {
     position: relative;
     display: block;
-    margin: 0 0 18px;
-    padding: 0 0 18px 90px;
-    border-bottom: 1px solid var(--line);
+    margin: 0 0 12px;
+    padding: 0 0 0 90px;
     color: var(--ink-soft);
 }
 
-iro-section > p > li time {
+.updates-list > li time {
     position: absolute;
     top: 0;
     left: 0;
@@ -304,30 +345,13 @@ iro-section > p > li time {
     font-variant-numeric: tabular-nums;
 }
 
-iro-section > p > li:last-child {
+.updates-list > li:last-child {
     margin-bottom: 0;
-    border-bottom: 0;
-}
-
-iro-section > p > li::first-line {
-    color: var(--ink-faint);
-    font-variant-numeric: tabular-nums;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-}
-
-table h3 {
-    margin: 36px 0 8px;
-    color: var(--navy-900);
-    font-size: 1.08rem;
-    letter-spacing: .02em;
-}
-
-table tr:first-child h3 {
-    margin-top: 0;
 }
 
 iro-notice {
@@ -431,15 +455,16 @@ iro-notice + iro-notice {
     .publication-nav {
         display: flex;
         flex-wrap: wrap;
+        align-items: flex-start;
         gap: 8px 18px;
         margin-top: 0;
     }
 
-    iro-section > p > li {
+    .updates-list > li {
         padding-left: 0;
     }
 
-    iro-section > p > li time {
+    .updates-list > li time {
         position: static;
         display: block;
         margin-bottom: 4px;

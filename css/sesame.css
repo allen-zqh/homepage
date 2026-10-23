@@ -1,0 +1,110 @@
+/* A small companion, isolated from both the menu and the language-loaded content. */
+.navbar {
+    column-gap: 24px;
+}
+
+.sesame-companion {
+    display: flex;
+    flex: 0 1 208px;
+    align-items: center;
+    min-width: 64px;
+    margin-right: auto;
+}
+
+.sesame-stage {
+    position: relative;
+    flex: 1 1 208px;
+    min-width: 64px;
+    max-width: 208px;
+    height: 62px;
+    overflow: hidden;
+}
+
+.sesame-cat {
+    --sesame-x: 0px;
+    --sesame-facing: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+    transform: translateX(var(--sesame-x));
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.sesame-sprite {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/sesame/sprites.png');
+    background-repeat: no-repeat;
+    background-size: 400% 400%;
+    background-position: 0 0;
+    pointer-events: none;
+}
+
+.sesame-cat[data-action="run"] .sesame-sprite {
+    transform: scaleX(var(--sesame-facing));
+}
+
+.sesame-cat:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+.sesame-stage[data-unavailable="true"] .sesame-cat {
+    position: static;
+    width: 100%;
+    height: 100%;
+    color: var(--ink-faint);
+    font: inherit;
+    font-size: .65rem;
+    transform: none;
+    cursor: default;
+}
+
+@media (min-width: 681px) and (max-width: 1000px) {
+    .navbar {
+        column-gap: 12px;
+    }
+
+    .nav-tools {
+        gap: 18px;
+    }
+
+    .nav-links {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 680px) {
+    .sesame-companion {
+        grid-column: 1;
+        grid-row: 1;
+        width: min(140px, 100%);
+        min-width: 0;
+    }
+
+    .sesame-stage {
+        min-width: 48px;
+        max-width: 140px;
+        height: 48px;
+    }
+
+    .sesame-cat {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media print {
+    .sesame-companion {
+        display: none;
+    }
+}
