@@ -25,7 +25,8 @@ Then open [http://localhost:8000](http://localhost:8000) in a browser. Press `Co
 ├── css/                    # Layout, typography, colors, and components
 ├── js/navigation.js        # Loads content and manages language switching
 ├── assets/                 # Portrait and favicon
-└── zhao_cv.pdf             # Curriculum vitae
+├── zhao_cv.pdf             # Chinese CV
+└── zhao_cv_en.pdf          # English CV
 ```
 
 ## Updating the site
@@ -37,14 +38,14 @@ The companion uses `assets/sesame/sprites.png` (four columns and four action row
 - Edit English academic content in `html/home.html` and its Chinese counterpart in `html/home-zh.html`.
 - Keep section IDs and publication anchors identical in both content files so in-page links continue to work when switching languages.
 - Keep English publication titles, venue names, author lists, and publication links identical across both files.
-- Group journal papers by the year shown in their citation, newest first. The latest year (`journal-2026`) is open initially; `journal-2025` and `earlier-journals` start closed. Older papers retain year subheadings inside their shared group. Move the cutoff and default open year forward as new years are added.
+- Group journal papers by their citation year, newest first. The latest citation year is open initially; the previous year and Earlier Years start closed. Keep older year anchors as subheadings inside Earlier Years. For papers published online ahead of their volume date, use the online announcement month in Updates and the volume year in Journal Papers.
 - Journal Papers is a regular heading, with no category-level collapse. Working papers and conference papers start closed. Update the counts in category and year labels when adding or moving papers.
 - The left Journal Papers directory starts closed and has its own independent disclosure. Opening or closing it only shows or hides the year links; it does not scroll or change the content on the right. Clicking a year link opens that year before scrolling to it. Working Papers and Conference Papers links also open their targets. Repeated clicks never close a content group, other groups are left unchanged, and folding the content does not change the directory.
 - Keep content disclosure IDs identical in both languages so their open/closed state is preserved when switching languages. The independent left directory starts closed when a language is loaded. Printing includes all publications.
 - Update the footer date after substantive changes, and keep the descriptions in `index.html` and `js/navigation.js` aligned with the profile.
 - Adjust the visual system in `css/colors.css` and `css/page.css`.
 - Replace `assets/avatar.jpg` to update the portrait.
-- Replace `zhao_cv.pdf` while keeping the filename unchanged to update the CV.
+- To update a CV, replace the corresponding PDF in the repository root: `zhao_cv.pdf` for the Chinese page or `zhao_cv_en.pdf` for the English page. Keep these filenames so the existing links continue to work.
 
 The Chinese version can be shared directly with `?lang=zh`, for example:
 

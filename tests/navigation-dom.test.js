@@ -171,8 +171,10 @@ function installBrowser(url, savedLanguage = null) {
     return { content, links, buttons, storage, siteName, description, elementsById };
 }
 
+const latestYear = 'journal-2027';
+const previousYear = 'journal-2026';
 const publicationGroupIds = [
-    'journal-2026', 'journal-2025', 'earlier-journals',
+    latestYear, previousYear, 'earlier-journals',
     'working-papers', 'conference-papers',
 ];
 
@@ -205,10 +207,10 @@ function installPublicationBrowser(url = 'https://example.com/') {
             const disclosure = new FakeElement({ publicationDisclosure: '' });
             disclosure.id = id;
             disclosure.tagName = 'DETAILS';
-            disclosure.open = id === 'journal-2026';
+            disclosure.open = id === latestYear;
             page.elementsById.set(id, disclosure);
         }
-        for (const id of ['journal-2024', 'journal-2023', 'journal-2021', 'paper:with.special-id']) {
+        for (const id of ['journal-2025', 'journal-2024', 'journal-2023', 'journal-2021', 'paper:with.special-id']) {
             const heading = new FakeElement();
             heading.id = id;
             heading.parentElement = page.elementsById.get('earlier-journals');
@@ -254,7 +256,7 @@ test('sidebar summary clicks and native sidebar toggles leave right disclosures 
     const page = installPublicationBrowser('https://example.com/#publications');
     await initializeLanguage();
     assert.equal(page.get('journal-navigation').open, false);
-    page.toggle('journal-2026', false);
+    page.toggle(latestYear, false);
     page.toggle('working-papers', true);
     const originalUrl = window.location.href;
     for (const open of [true, false]) {
@@ -276,13 +278,13 @@ test('year links reveal right targets without managing sidebar openness', async 
     const page = installPublicationBrowser();
     await initializeLanguage();
     page.toggle('journal-navigation', true);
-    page.clickAnchor('#journal-2025');
-    assertOpenGroups(page, ['journal-2026', 'journal-2025']);
-    assert.equal(page.get('journal-2025').scrollCount, 1);
+    page.clickAnchor(`#${previousYear}`);
+    assertOpenGroups(page, [latestYear, previousYear]);
+    assert.equal(page.get(previousYear).scrollCount, 1);
     assert.equal(page.get('journal-navigation').open, true);
     page.toggle('journal-navigation', false);
     page.navigate('#journal-2024');
-    assertOpenGroups(page, ['journal-2026', 'journal-2025', 'earlier-journals']);
+    assertOpenGroups(page, [latestYear, previousYear, 'earlier-journals']);
     assert.equal(page.get('journal-navigation').open, false);
 });
 
@@ -293,12 +295,12 @@ test('publication print and language state management exclude the independent si
     assertOpenGroups(page, publicationGroupIds);
     assert.equal(page.get('journal-navigation').open, false);
     window.dispatch('afterprint');
-    assertOpenGroups(page, ['journal-2026']);
+    assertOpenGroups(page, [latestYear]);
     page.toggle('journal-navigation', true);
     window.dispatch('beforeprint');
     window.dispatch('afterprint');
     assert.equal(page.get('journal-navigation').open, true);
-    page.toggle('journal-2026', false);
+    page.toggle(latestYear, false);
     await page.buttons[1].click();
     assertOpenGroups(page, []);
     assert.equal(page.get('journal-navigation').open, false);
@@ -307,22 +309,22 @@ test('publication print and language state management exclude the independent si
 test('journal category anchor scrolls without changing any year disclosure state', async () => {
     const page = installPublicationBrowser();
     await initializeLanguage();
-    assertOpenGroups(page, ['journal-2026']);
+    assertOpenGroups(page, [latestYear]);
     page.clickAnchor('#journal-papers');
-    assertOpenGroups(page, ['journal-2026']);
-    page.toggle('journal-2026', false);
+    assertOpenGroups(page, [latestYear]);
+    page.toggle(latestYear, false);
     page.toggle('earlier-journals', true);
     page.clickAnchor('#journal-papers');
     assertOpenGroups(page, ['earlier-journals']);
     assert.equal(page.get('journal-papers').scrollCount, 2);
 });
 
-test('manually closing default-open 2026 survives languages and detached toggle events', async () => {
+test('manually closing the default-open year survives languages and detached toggle events', async () => {
     const page = installPublicationBrowser();
     await initializeLanguage();
-    const detachedJournal = page.get('journal-2026');
-    assertOpenGroups(page, ['journal-2026']);
-    page.toggle('journal-2026', false);
+    const detachedJournal = page.get(latestYear);
+    assertOpenGroups(page, [latestYear]);
+    page.toggle(latestYear, false);
     await page.buttons[1].click();
     assertOpenGroups(page, []);
     detachedJournal.open = true;
@@ -378,29 +380,29 @@ test('a slower stale request cannot overwrite the latest language', async () => 
     assert.equal(page.content.innerHTML, 'English latest');
 });
 
-test('only 2026 starts open and independent states restore across languages', async () => {
+test('only the latest year starts open and independent states restore across languages', async () => {
     const page = installPublicationBrowser();
     await initializeLanguage();
 
-    assertOpenGroups(page, ['journal-2026']);
-    page.toggle('journal-2026', true);
+    assertOpenGroups(page, [latestYear]);
+    page.toggle(latestYear, true);
     page.toggle('earlier-journals', true);
     page.toggle('working-papers', true);
     await page.buttons[1].click();
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals', 'working-papers']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals', 'working-papers']);
 
     page.toggle('earlier-journals', false);
-    page.toggle('journal-2025', true);
+    page.toggle(previousYear, true);
     page.toggle('working-papers', false);
     await page.buttons[0].click();
-    assertOpenGroups(page, ['journal-2026', 'journal-2025']);
+    assertOpenGroups(page, [latestYear, previousYear]);
 });
 
 test('a deep link reveals its ancestor before scrolling and decoded IDs do not use CSS selectors', async () => {
     const page = installPublicationBrowser('https://example.com/#paper%3Awith.special-id');
     await initializeLanguage();
 
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals']);
     assert.equal(page.get('paper:with.special-id').scrollCount, 1);
     assert.equal(page.get('conference-papers').open, false);
     assert.equal(page.content.attributes['aria-busy'], 'false');
@@ -427,7 +429,7 @@ for (const id of publicationGroupIds) {
     test(`clicking #${id} reveals its target and required ancestors before scrolling`, async () => {
         const page = installPublicationBrowser();
         await initializeLanguage();
-        const expected = id === 'journal-2026' ? ['journal-2026'] : ['journal-2026', id];
+        const expected = id === latestYear ? [latestYear] : [latestYear, id];
         page.get(id).onScroll = () => assertOpenGroups(page, expected);
 
         const event = page.clickAnchor(`#${id}`);
@@ -445,16 +447,16 @@ for (const id of publicationGroupIds) {
 test('opening another year leaves previously opened peers unchanged', async () => {
     const page = installPublicationBrowser();
     await initializeLanguage();
-    page.clickAnchor('#journal-2026');
-    page.clickAnchor('#journal-2025');
-    assertOpenGroups(page, ['journal-2026', 'journal-2025']);
+    page.clickAnchor(`#${latestYear}`);
+    page.clickAnchor(`#${previousYear}`);
+    assertOpenGroups(page, [latestYear, previousYear]);
 });
 
-for (const year of [2024, 2023, 2021]) {
+for (const year of [2025, 2024, 2023, 2021]) {
     test(`legacy journal-${year} deep link reveals Earlier Years before scrolling`, async () => {
         const page = installPublicationBrowser(`https://example.com/#journal-${year}`);
         await initializeLanguage();
-        assertOpenGroups(page, ['journal-2026', 'earlier-journals']);
+        assertOpenGroups(page, [latestYear, 'earlier-journals']);
         assert.equal(page.get(`journal-${year}`).tagName, 'DIV');
         assert.equal(page.get(`journal-${year}`).scrollCount, 1);
     });
@@ -464,7 +466,7 @@ test('hash changes reveal groups for history navigation and tolerate malformed h
     const page = installPublicationBrowser();
     await initializeLanguage();
     page.navigate('#journal-2024');
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals']);
     assert.equal(page.get('journal-2024').scrollCount, 1);
 
     page.navigate('#conference-papers');
@@ -479,11 +481,11 @@ test('language switching preserves an explicitly closed group even at its curren
     page.toggle('earlier-journals', false);
     await page.buttons[1].click();
 
-    assertOpenGroups(page, ['journal-2026']);
+    assertOpenGroups(page, [latestYear]);
     assert.equal(page.get('earlier-journals').scrollCount, 1);
     assert.equal(page.get('journal-2024').scrollCount, 0);
     page.clickAnchor('#journal-2024');
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals']);
 });
 
 test('rapid language switching preserves state and ignores stale page events and responses', async () => {
@@ -505,13 +507,13 @@ test('rapid language switching preserves state and ignores stale page events and
     await chinese;
 
     assert.equal(document.documentElement.lang, 'en');
-    assertOpenGroups(page, ['journal-2026', 'conference-papers']);
+    assertOpenGroups(page, [latestYear, 'conference-papers']);
 });
 
 test('print expands all groups temporarily without changing saved language-switch state', async () => {
     const page = installPublicationBrowser();
     await initializeLanguage();
-    page.toggle('journal-2026', true);
+    page.toggle(latestYear, true);
     page.toggle('earlier-journals', true);
     page.toggle('working-papers', true);
     window.dispatch('beforeprint');
@@ -522,10 +524,10 @@ test('print expands all groups temporarily without changing saved language-switc
     assertOpenGroups(page, publicationGroupIds);
 
     window.dispatch('afterprint');
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals', 'working-papers']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals', 'working-papers']);
     publicationGroupIds.forEach(id => page.get(id).dispatch('toggle'));
     await page.buttons[0].click();
-    assertOpenGroups(page, ['journal-2026', 'earlier-journals', 'working-papers']);
+    assertOpenGroups(page, [latestYear, 'earlier-journals', 'working-papers']);
 });
 
 test('a stale animation callback cannot reopen or scroll the next language page', async () => {

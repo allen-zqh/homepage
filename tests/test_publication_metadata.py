@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 EXPECTED_JOURNAL_DETAILS = [
+    "Agricultural and Forest Meteorology, 393, 111617 (2027)",
     "Urban Climate, 67, 102941 (2026)",
     "Technological Forecasting and Social Change, 227, 124611 (2026)",
     "The Journal of Technology Transfer, 51(4), 3003–3044 (2026)",
@@ -31,7 +32,11 @@ class PublicationParser(HTMLParser):
         self._buffer = []
         self._italic_buffer = None
         self.disclosures = {}
+        self.display_counts = {}
+        self._count_group = None
         self.anchor_links = []
+        self.update_links = []
+        self._in_updates = False
         self.heading_ids = set()
         self.year_navigation = []
         self._disclosure_stack = []
@@ -39,18 +44,30 @@ class PublicationParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
         if tag == "details":
-            disclosure = {"attrs": attributes, "entries": []}
+            disclosure = {"attrs": attributes, "entries": [], "links": [], "headings": []}
             self.disclosures[attributes.get("id")] = disclosure
             self._disclosure_stack.append(disclosure)
+        if tag == "ul" and "updates-list" in attributes.get("class", "").split():
+            self._in_updates = True
         if tag == "a":
             self.anchor_links.append(attributes.get("href"))
+            if self._in_updates:
+                self.update_links.append(attributes.get("href"))
+            if self._disclosure_stack:
+                self._disclosure_stack[-1]["links"].append(attributes.get("href"))
         if tag in ("h3", "h4", "h5") and "id" in attributes:
             self.heading_ids.add(attributes["id"])
+            if self._disclosure_stack:
+                self._disclosure_stack[-1]["headings"].append(attributes["id"])
         if "publication-year-nav" in attributes.get("class", "").split():
             self.year_navigation.append({
                 "attrs": attributes,
                 "inside_disclosure": bool(self._disclosure_stack),
             })
+        if tag == "span" and "publication-count" in attributes.get("class", "").split():
+            self._count_group = (
+                self._disclosure_stack[-1]["attrs"]["id"] if self._disclosure_stack else "journal-papers"
+            )
         if tag == "td" and "pub-desc-wrapper" in attributes.get("class", "").split():
             self._capture = True
             self._buffer = []
@@ -58,12 +75,18 @@ class PublicationParser(HTMLParser):
             self._italic_buffer = []
 
     def handle_data(self, data):
+        if self._count_group and data.strip():
+            self.display_counts[self._count_group] = data.strip()
         if self._capture:
             self._buffer.append(data)
         if self._italic_buffer is not None:
             self._italic_buffer.append(data)
 
     def handle_endtag(self, tag):
+        if tag == "span":
+            self._count_group = None
+        if tag == "ul":
+            self._in_updates = False
         if tag == "i" and self._italic_buffer is not None:
             self.italic_fragments.append(" ".join("".join(self._italic_buffer).split()))
             self._italic_buffer = None
@@ -80,13 +103,13 @@ class PublicationParser(HTMLParser):
 def journal_entries(path):
     parser = PublicationParser()
     parser.feed(path.read_text(encoding="utf-8"))
-    return parser.entries[:13]
+    return parser.entries[:len(EXPECTED_JOURNAL_DETAILS)]
 
 
 def journal_italic_metadata(path):
     parser = PublicationParser()
     parser.feed(path.read_text(encoding="utf-8"))
-    return parser.italic_fragments[:13]
+    return parser.italic_fragments[:len(EXPECTED_JOURNAL_DETAILS)]
 
 
 class PublicationMetadataTests(unittest.TestCase):
@@ -113,24 +136,37 @@ class PublicationMetadataTests(unittest.TestCase):
             metadata = journal_italic_metadata(ROOT / "html" / page)
             self.assertEqual(metadata, EXPECTED_JOURNAL_DETAILS)
 
-    def test_journal_groups_are_complete_reachable_and_only_2026_starts_open(self):
+    def test_new_paper_is_linked_once_in_updates_and_its_citation_year(self):
+        url = "https://doi.org/10.1016/j.agrformet.2026.111617"
+        for page in ("home.html", "home-zh.html"):
+            with self.subTest(page=page):
+                parser = PublicationParser()
+                parser.feed((ROOT / "html" / page).read_text(encoding="utf-8"))
+                self.assertEqual(parser.update_links.count(url), 1)
+                self.assertEqual(parser.disclosures["journal-2027"]["links"].count(url), 1)
+                self.assertEqual(parser.anchor_links.count(url), 2)
+
+    def test_journal_groups_are_complete_reachable_and_only_2027_starts_open(self):
         for page in ("home.html", "home-zh.html"):
             parser = PublicationParser()
             parser.feed((ROOT / "html" / page).read_text(encoding="utf-8"))
+            self.assertEqual(parser.display_counts.get("journal-papers"), f"({len(EXPECTED_JOURNAL_DETAILS)})")
             for anchor, years in (
+                ("journal-2027", [2027]),
                 ("journal-2026", [2026] * 6),
-                ("journal-2025", [2025] * 4),
-                ("earlier-journals", [2024, 2023, 2021]),
+                ("earlier-journals", [2025] * 4 + [2024, 2023, 2021]),
             ):
                 with self.subTest(page=page, anchor=anchor):
                     self.assertIn(anchor, parser.disclosures)
                     group = parser.disclosures[anchor]
-                    self.assertEqual("open" in group["attrs"], anchor == "journal-2026")
+                    self.assertEqual("open" in group["attrs"], anchor == "journal-2027")
                     self.assertIn("data-publication-disclosure", group["attrs"])
                     self.assertEqual(len(group["entries"]), len(years))
+                    self.assertEqual(parser.display_counts.get(anchor), f"({len(years)})")
                     for entry, year in zip(group["entries"], years):
                         self.assertTrue(entry.endswith(f"({year})"))
                     self.assertIn(f"#{anchor}", parser.anchor_links)
+            self.assertIn("journal-2025", parser.disclosures["earlier-journals"]["headings"])
 
     def test_working_and_conference_papers_are_complete_collapsed_groups(self):
         for page in ("home.html", "home-zh.html"):
